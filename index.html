@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="المدفوعات">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" id="ati" href="">
+<title>دفتر المدفوعات</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1b1f24;--mut:#6b7280;--bd:#e5e7eb;--pri:#0f766e;--red:#dc2626;--grn:#16a34a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111418;--card:#1b2027;--tx:#eef0f3;--mut:#9aa3af;--bd:#2c333d;--pri:#2dd4bf;--red:#f87171;--grn:#4ade80}}
+:root[data-theme="dark"]{--bg:#111418;--card:#1b2027;--tx:#eef0f3;--mut:#9aa3af;--bd:#2c333d;--pri:#2dd4bf;--red:#f87171;--grn:#4ade80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;font-size:16px;padding-bottom:90px}
+.wrap{max-width:640px;margin:0 auto;padding:12px}
+h1{font-size:20px;margin:6px 0 12px}
+h3{margin:18px 0 8px;font-size:16px}
+h4{margin:14px 0 6px;font-size:15px}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px}
+.box small{color:var(--mut);display:block;margin-bottom:4px;font-size:13px}
+.box b{font-size:19px}
+.bal{text-align:center;padding:18px;margin-bottom:10px}.bal b{font-size:30px;display:block;color:var(--pri)}
+.tabs{display:flex;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);padding:10px;border-radius:9px;font:inherit;font-weight:600}
+.tabs button.on{background:var(--pri);color:#fff}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:8px}
+.row .n{font-weight:600}.row small{color:var(--mut);display:block;margin-top:2px}.row .a{text-align:left}.row .a b{display:block}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+input,textarea{width:100%;font:inherit;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);margin-bottom:10px}
+.btn{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:600;background:var(--pri);color:#fff}
+.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.btn.d{background:var(--red)}
+.fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:16px;right:16px;max-width:608px;margin:0 auto;display:flex}
+.fab .btn{flex:1;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:9}
+.sheet>div{background:var(--card);width:100%;max-width:640px;margin:0 auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.two{display:flex;gap:8px}.two>*{flex:1}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+.lbl{font-size:12px;color:var(--mut);margin:0 2px 3px;display:block}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+td.w{white-space:normal}
+th{color:var(--mut);font-weight:600;background:var(--bg)}
+tfoot td{font-weight:700;background:var(--bg)}
+.x{border:0;background:none;color:var(--pri);font:inherit;padding:2px 6px}
+.bar{height:6px;border-radius:99px;background:var(--bd);margin-top:4px;min-width:60px}.bar i{display:block;height:100%;border-radius:99px;background:var(--pri)}
+.rh{border-bottom:3px solid var(--pri);padding-bottom:10px;margin-bottom:14px}
+.rh h2{margin:0 0 4px;font-size:22px;color:var(--pri)}.rh small{color:var(--mut);display:block}
+.k{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.k .box{padding:10px;text-align:center}.k b{font-size:15px}
+.hero{background:var(--pri);color:#fff;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px}.hero small{opacity:.85;display:block}.hero b{font-size:28px}
+#ob{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;max-width:640px;margin:0 auto;padding:0 12px}#ob .box{border-color:var(--red);color:var(--red);font-weight:600;margin-top:8px;font-size:14px}
+.po{display:none}
+textarea{height:72px;resize:none}
+.nt{color:var(--mut);font-size:12px}
+.st{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:16px}
+@media (max-width:480px){.k{grid-template-columns:1fr 1fr}}
+@media print{
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{--bg:#f3f4f6;--card:#fff;--tx:#000;--mut:#444;--bd:#bbb;--pri:#0f766e}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{padding:0;background:#fff}.wrap{max-width:none;padding:0}
+.noprint,.fab,.tabs,.sheet{display:none!important}.po{display:block}
+.tw{overflow:visible}thead{display:table-header-group}tr,.box{break-inside:avoid}
+td,th{white-space:normal}
+.st{border:0;padding:0;break-before:page}
+body.pone .rps,body.pone .st:not(.sel){display:none!important}
+body.pone .st.sel{break-before:auto}
+}
+</style>
+</head>
+<body>
+<div id="ob" class="noprint"></div>
+<div class="wrap" id="app"></div>
+<script>
+var KEY="pay_v2",S={ps:[],tab:"sup",cur:null,sh:null,f:null,del:false,from:"",to:"",q:""};
+try{S.ps=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){}
+if(!S.ps.length){try{var old=JSON.parse(localStorage.getItem("pay_v1"))||[],g={};
+ old.forEach(function(x,i){var n=x.p||"غير محدد";(g[n]=g[n]||{id:"p"+Date.now()+Object.keys(g).length,name:n,phone:"",tx:[]}).tx.push({id:x.id,d:x.d,w:x.w,a:x.a})});
+ S.ps=Object.keys(g).map(function(k){return g[k]})}catch(e){}}
+var CFG={},LU=0,tm=null;
+try{CFG=JSON.parse(localStorage.getItem("pay_cfg"))||{};LU=+(localStorage.getItem("pay_ts")||0)}catch(e){}
+S.sy=CFG.u?"":"☁️ غير متصل بـ Turso";
+function store(){try{localStorage.setItem(KEY,JSON.stringify(S.ps));localStorage.setItem("pay_ts",String(LU))}catch(e){}}
+var PW="";try{PW=localStorage.getItem("pay_pw")||""}catch(e){}
+function hp(p){var t="pay|"+p;try{if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return("0"+x.toString(16)).slice(-2)}).join("")})}catch(e){}return Promise.resolve("b"+btoa(unescape(encodeURIComponent(t))))}
+function off(){return!!CFG.u&&navigator.onLine===false}
+function blocked(){if(off()){alert("لا يتوفر إنترنت.\nالتسجيل متوقف علشان بياناتك ما تتسجلش على الجهاز بس وتضيع.\nارجع للنت وكمّل.");return true}return false}
+function ob(){var e=document.getElementById("ob");if(!e)return;e.innerHTML=off()?'<div class="box">⚠️ لا يتوفر إنترنت — التسجيل متوقف لحماية بياناتك</div>':S.pf?'<div class="box">⚠️ آخر تسجيل ما اترفعش للسيرفر. اتأكد من الإنترنت وجرّب المزامنة من ⚙️</div>':""}
+var FH=null;
+function setFy(x){S.fy=x;var e=document.getElementById("fy");if(e)e.textContent=x}
+function idb(mode,fn){return new Promise(function(res,rej){var r=indexedDB.open("paydb",1);r.onupgradeneeded=function(){r.result.createObjectStore("h")};r.onsuccess=function(){var t=r.result.transaction("h",mode),o=fn(t.objectStore("h"));t.oncomplete=function(){res(o&&o.result)};t.onerror=function(){rej(t.error)}};r.onerror=function(){rej(r.error)}})}
+function fperm(ask){var o={mode:"readwrite"};return FH.queryPermission(o).then(function(p){return p==="granted"?true:ask?FH.requestPermission(o).then(function(x){return x==="granted"}):false})}
+function fwrite(ask){if(!FH)return Promise.resolve();
+ return fperm(ask).then(function(ok){if(!ok){setFy("⚠️ الملف محتاج تفعيل، افتح 💾 واضغط حفظ الآن");return}
+  return FH.createWritable().then(function(w){return w.write(JSON.stringify({v:2,ts:LU,ps:S.ps})).then(function(){return w.close()})}).then(function(){setFy("💾 اتحفظ في الملف "+FH.name+" "+new Date().toLocaleTimeString("ar-EG"))})}).catch(function(e){setFy("⚠️ فشل الحفظ في الملف: "+e.message)})}
+function fpick(h){FH=h;return idb("readwrite",function(st){return st.put(h,"f")}).catch(function(){})}
+function importData(txt){if(blocked())throw new Error("لا يتوفر إنترنت");var d=JSON.parse(txt),l=Array.isArray(d)?d:d.ps;if(!Array.isArray(l))throw new Error("ملف غير صالح");S.ps=l;save();S.sh=null;S.cur=null;render()}
+function bk(){if(FH)return"💾 مربوط بملف: "+FH.name;var t=0;try{t=+(localStorage.getItem("pay_bk")||0)}catch(e){}return S.ps.length?(t?"💾 آخر نسخة احتياطية: "+fd(new Date(t-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10)):"⚠️ لسه معملتش نسخة احتياطية"):""}
+function ios(){return/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)}
+function standalone(){return navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)}
+function hintOn(){try{return ios()&&!standalone()&&!localStorage.getItem("pay_hint")}catch(e){return false}}
+function dl(){
+ var txt=JSON.stringify({v:2,ts:LU,ps:S.ps}),name="payments-"+today()+".json",done=function(){try{localStorage.setItem("pay_bk",String(Date.now()))}catch(e){}setFy(bk())};
+ try{var f=new File([txt],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).then(done).catch(function(){});return}}catch(e){}
+ var b=new Blob([txt],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();done()
+}
+try{idb("readonly",function(st){return st.get("f")}).then(function(h){if(h){FH=h;setFy("💾 مربوط بملف: "+h.name)}}).catch(function(){})}catch(e){}
+S.fy=bk();
+function save(){LU=Date.now();store();fwrite(false);if(CFG.u){setSy("⏳ في الانتظار...");clearTimeout(tm);tm=setTimeout(push,800)}}
+function setSy(x){S.sy=x;var e=document.getElementById("sy");if(e)e.textContent=x}
+var CT={sql:"CREATE TABLE IF NOT EXISTS kv(k TEXT PRIMARY KEY, v TEXT, ts INTEGER)"};
+function q(list){var u=CFG.u.replace(/^libsql:\/\//,"https://").replace(/\/+$/,"");
+ return fetch(u+"/v2/pipeline",{method:"POST",headers:{"Authorization":"Bearer "+CFG.t,"Content-Type":"application/json"},body:JSON.stringify({requests:list.map(function(x){return{type:"execute",stmt:x}}).concat([{type:"close"}])})})
+ .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+ .then(function(j){j.results.forEach(function(x){if(x.type==="error")throw new Error(x.error.message)});return j.results})}
+function push(){if(!CFG.u)return;setSy("⏳ جاري الرفع...");
+ return q([CT,{sql:"INSERT OR REPLACE INTO kv(k,v,ts) VALUES('pay',?,?)",args:[{type:"text",value:JSON.stringify(S.ps)},{type:"integer",value:String(LU)}]}])
+ .then(function(){S.pf=false;ob();setSy("☁️ تم الرفع "+new Date().toLocaleTimeString("ar-EG"))}).catch(function(e){S.pf=true;ob();setSy("⚠️ فشل الرفع: "+e.message)})}
+function apply(v,ts){S.ps=JSON.parse(v);LU=ts;store();S.sh=null;render();setSy("☁️ تم التحميل من Turso "+new Date().toLocaleTimeString("ar-EG"))}
+function pull(){if(!CFG.u)return;setSy("⏳ جاري المزامنة...");
+ return q([CT,{sql:"SELECT v,ts FROM kv WHERE k='pay'"}]).then(function(r){var rows=r[1].response.result.rows;
+  if(!rows.length)return push();
+  var rts=+rows[0][1].value;
+  if(LU===0&&S.ps.length&&rts>0){S.rv=rows[0][0].value;S.rts=rts;S.sh="cf";render();setSy("⚠️ محتاج قرارك");return}
+  if(rts>LU)apply(rows[0][0].value,rts);
+  else if(rts<LU)return push();
+  else setSy("☁️ متزامن")}).catch(function(e){setSy("⚠️ فشل الاتصال: "+e.message)})}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function m(n){return Number(n).toLocaleString("ar-EG",{maximumFractionDigits:2})}
+function today(){var d=new Date();return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function fd(d){return new Date(d+"T00:00:00").toLocaleDateString("ar-EG",{day:"numeric",month:"short",year:"numeric"})}
+function sum(l){return l.reduce(function(a,x){return a+x.a},0)}
+function asc(l){return l.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:a.id<b.id?-1:1})}
+function P(id){return S.ps.filter(function(p){return p.id===id})[0]}
+function total(){return S.ps.reduce(function(a,p){return a+sum(p.tx)},0)}
+function inr(t){return(!S.from||t.d>=S.from)&&(!S.to||t.d<=S.to)}
+
+function listH(){
+ var q=S.q.trim().toLowerCase(),l=S.ps.filter(function(p){return!q||(p.name+" "+(p.phone||"")+" "+p.tx.map(function(t){return t.w+" "+(t.n||"")+" "+t.a}).join(" ")).toLowerCase().indexOf(q)>-1});
+ if(!l.length)return'<div class="empty">'+(q?"لا توجد نتائج":'لسه مفيش موردين، اضغط "مورد جديد"')+'</div>';
+ return l.map(function(p){var a=asc(p.tx),last=a.length?" · آخر دفعة "+fd(a[a.length-1].d):"";
+  return'<div class="row" data-a="open" data-id="'+p.id+'"><div><div class="n">'+esc(p.name)+'</div><small>'+m(p.tx.length)+' حركة'+last+'</small></div><div class="a"><b>'+m(sum(p.tx))+'</b><small>إجمالي المدفوع</small></div></div>'}).join("")
+}
+function homeH(){
+ return'<div class="top" style="margin-bottom:2px"><h1 style="flex:1;margin:0">💰 دفتر المدفوعات</h1><button class="btn g" data-a="gear" style="padding:8px 12px" aria-label="الإعدادات">⚙️</button></div><small id="sy" style="color:var(--mut);display:block;margin-bottom:4px">'+esc(S.sy)+'</small><small id="fy" style="color:var(--mut);display:block;margin-bottom:10px">'+esc(S.fy||"")+'</small>'+(hintOn()?'<div class="box noprint" style="margin-bottom:10px;border-color:var(--pri)"><small style="color:var(--tx);margin:0 0 8px">📱 على الآيفون: علشان بياناتك تفضل محفوظة، افتح الصفحة في Safari ← زر المشاركة ← <b>إضافة إلى الشاشة الرئيسية</b>، وبعدها استخدمه من الأيقونة.</small><button class="btn g" data-a="hidehint" style="padding:6px 12px">تمام</button></div>':'')+'<div class="box bal"><small>إجمالي ما دفعته لكل الموردين</small><b>'+m(total())+' ج.م</b></div>'+
+ '<input id="q" type="search" placeholder="🔍 ابحث باسم المورد أو البيان أو المبلغ" value="'+esc(S.q)+'"><div id="lst">'+listH()+'</div>'+
+ '<div class="fab"><button class="btn" data-a="addp">+ مورد جديد</button></div>'
+}
+function suppH(p){
+ var a=asc(p.tx),run={},c=0,h='';
+ a.forEach(function(x){c+=x.a;run[x.id]=c});
+ h+='<div class="top noprint"><button class="btn g" data-a="back">→</button><h1 style="margin:0;flex:1">'+esc(p.name)+'</h1><button class="btn g" data-a="editp">✎</button></div>';
+ h+='<div class="po rh"><h2>كشف حساب: '+esc(p.name)+'</h2><small>تاريخ الإصدار: '+fd(today())+'</small></div>';
+ if(p.phone)h+='<p class="noprint" style="margin:0 0 10px"><a href="tel:'+esc(p.phone)+'" style="color:var(--pri)">📞 '+esc(p.phone)+'</a></p>';
+ h+='<div class="hero"><small>إجمالي ما دفعته لهذا المورد</small><b>'+m(c)+' ج.م</b></div>';
+ h+='<h3>الحركات ('+m(a.length)+')</h3>';
+ if(!a.length)return h+'<div class="empty">لسه مفيش حركات، اضغط "دفعة جديدة"</div><div class="fab"><button class="btn" data-a="newt">+ دفعة جديدة</button></div>';
+ h+='<div class="tw"><table><thead><tr><th>#</th><th>التاريخ</th><th>البيان</th><th>ملاحظة</th><th>المبلغ</th><th>المجموع</th><th class="noprint"></th></tr></thead><tbody>';
+ a.forEach(function(x,i){h+='<tr><td>'+m(i+1)+'</td><td>'+fd(x.d)+'</td><td class="w">'+esc(x.w)+'</td><td class="w nt">'+esc(x.n||"")+'</td><td>'+m(x.a)+'</td><td><b>'+m(run[x.id])+'</b></td><td class="noprint"><button class="x" data-a="editt" data-id="'+x.id+'">✎</button></td></tr>'});
+ h+='</tbody><tfoot><tr><td colspan="4">الإجمالي</td><td>'+m(c)+'</td><td>'+m(c)+'</td><td class="noprint"></td></tr></tfoot></table></div>';
+ h+='<div class="noprint two"><button class="btn g" data-a="print">🖨️ طباعة / PDF</button><button class="btn g" data-a="shp" data-id="'+p.id+'">📤 مشاركة الكشف</button></div><div style="height:20px"></div>';
+ return h+'<div class="fab"><button class="btn" data-a="newt">+ دفعة جديدة</button></div>'
+}
+function repH(){
+ var h='<div class="noprint"><div class="two"><div><span class="lbl">من</span><input type="date" id="rf" value="'+esc(S.from)+'"></div><div><span class="lbl">إلى</span><input type="date" id="rt" value="'+esc(S.to)+'"></div></div><div class="two" style="margin-bottom:12px"><button class="btn g" data-a="all">كل الفترات</button><button class="btn g" data-a="month">هذا الشهر</button></div></div>';
+ var G=S.ps.map(function(p){var l=asc(p.tx.filter(inr));return{p:p,l:l,t:sum(l)}}).filter(function(g){return g.l.length}).sort(function(x,y){return y.t-x.t});
+ if(!G.length)return h+'<div class="empty">لا توجد دفعات في هذه الفترة</div>';
+ var all=[];G.forEach(function(g){all=all.concat(g.l)});all=asc(all);
+ var T=sum(all),n=all.length,a=S.from||all[0].d,b=S.to||all[n-1].d;h+='<div class="rps">';var mx=all.reduce(function(x,y){return y.a>x.a?y:x},all[0]);
+ h+='<div class="rh"><h2>تقرير المدفوعات للموردين</h2><small>الفترة: من '+fd(a)+' إلى '+fd(b)+'</small><small>تاريخ الإصدار: '+fd(today())+'</small></div>';
+ h+='<div class="hero"><small>إجمالي المدفوع</small><b>'+m(T)+' ج.م</b></div>';
+ h+='<div class="k"><div class="box"><small>عدد الموردين</small><b>'+m(G.length)+'</b></div><div class="box"><small>عدد الدفعات</small><b>'+m(n)+'</b></div><div class="box"><small>متوسط الدفعة</small><b>'+m(T/n)+'</b></div><div class="box"><small>أكبر دفعة</small><b>'+m(mx.a)+'</b></div></div>';
+ h+='<h3>ملخص الموردين</h3><div class="tw"><table><thead><tr><th>المورد</th><th>عدد</th><th>الإجمالي</th><th>النسبة</th></tr></thead><tbody>';
+ G.forEach(function(g){var p=g.t/T*100;h+='<tr><td class="w">'+esc(g.p.name)+'</td><td>'+m(g.l.length)+'</td><td><b>'+m(g.t)+'</b></td><td style="min-width:90px">'+m(Math.round(p*10)/10)+'٪<div class="bar"><i style="width:'+p+'%"></i></div></td></tr>'});
+ h+='</tbody><tfoot><tr><td>الإجمالي</td><td>'+m(n)+'</td><td>'+m(T)+'</td><td>١٠٠٪</td></tr></tfoot></table></div>';
+ var mo={};all.forEach(function(x){var k=x.d.slice(0,7);(mo[k]=mo[k]||{c:0,t:0});mo[k].c++;mo[k].t+=x.a});
+ var mk=Object.keys(mo).sort();
+ if(mk.length>1){h+='<h3>حسب الشهر</h3><div class="tw"><table><thead><tr><th>الشهر</th><th>عدد</th><th>الإجمالي</th></tr></thead><tbody>';
+  mk.forEach(function(k){h+='<tr><td>'+new Date(k+"-01T00:00:00").toLocaleDateString("ar-EG",{month:"long",year:"numeric"})+'</td><td>'+m(mo[k].c)+'</td><td><b>'+m(mo[k].t)+'</b></td></tr>'});
+  h+='</tbody></table></div>'}
+ h+='<div class="noprint two" style="margin-bottom:12px"><button class="btn" data-a="print">🖨️ طباعة التقرير كامل</button><button class="btn g" data-a="csv">📊 تصدير Excel</button></div><h3 class="noprint">كشوف حساب الموردين (جاهزة للإرسال)</h3></div>';
+ G.forEach(function(g){h+=stmtH(g.p,g.l)});
+ return h
+}
+function stmtH(p,l){
+ var c=0,t=sum(l),a=S.from||l[0].d,b=S.to||l[l.length-1].d,h='<div class="st" data-pid="'+p.id+'"><div class="rh"><h2>كشف حساب</h2><b style="font-size:18px">'+esc(p.name)+'</b>'+(p.phone?'<small dir="ltr" style="text-align:right">'+esc(p.phone)+'</small>':'')+'<small>الفترة: من '+fd(a)+' إلى '+fd(b)+'</small><small>تاريخ الإصدار: '+fd(today())+'</small></div>';
+ h+='<div class="tw"><table><thead><tr><th>#</th><th>التاريخ</th><th>البيان</th><th>ملاحظة</th><th>المبلغ</th><th>المجموع</th></tr></thead><tbody>';
+ l.forEach(function(x,i){c+=x.a;h+='<tr><td>'+m(i+1)+'</td><td>'+fd(x.d)+'</td><td class="w">'+esc(x.w)+'</td><td class="w nt">'+esc(x.n||"")+'</td><td>'+m(x.a)+'</td><td><b>'+m(c)+'</b></td></tr>'});
+ h+='</tbody><tfoot><tr><td colspan="4">الإجمالي ('+m(l.length)+' حركة)</td><td>'+m(t)+'</td><td>'+m(t)+'</td></tr></tfoot></table></div>';
+ h+='<div class="hero"><small>إجمالي ما تم دفعه</small><b>'+m(t)+' ج.م</b></div>';
+ return h+'<div class="noprint two"><button class="btn" data-a="printp" data-id="'+p.id+'">🖨️ طباعة / PDF</button><button class="btn g" data-a="shp" data-id="'+p.id+'">📤 مشاركة الكشف</button></div></div>'
+}
+function stmtText(p,l,f,e){
+ var c=0,t="كشف حساب: "+p.name+"\nالفترة: من "+fd(f||l[0].d)+" إلى "+fd(e||l[l.length-1].d)+"\n------------\n";
+ l.forEach(function(x){c+=x.a;t+=fd(x.d)+" | "+x.w+(x.n?" ("+x.n+")":"")+" | "+m(x.a)+" | المجموع "+m(c)+"\n"});
+ return t+"------------\nإجمالي المدفوع: "+m(c)+" ج.م"
+}
+function shareT(t,btn){try{if(navigator.share)navigator.share({text:t}).catch(function(){});else if(navigator.clipboard){navigator.clipboard.writeText(t);btn.textContent="تم النسخ ✓"}}catch(x){}}
+function pOne(id){
+ var el=document.querySelector('.st[data-pid="'+id+'"]');if(!el)return;
+ el.classList.add("sel");document.body.classList.add("pone");
+ var done=function(){document.body.classList.remove("pone");el.classList.remove("sel");window.removeEventListener("afterprint",done)};
+ window.addEventListener("afterprint",done);try{window.print()}catch(x){done()}
+}
+function sheetH(){
+ var er=S.pe?'<p style="color:var(--red);margin:0 0 10px">'+esc(S.pe)+'</p>':'';
+ if(S.sh==="lk")return'<div class="sheet"><div><h3 style="margin-top:0">🔒 الإعدادات</h3><input id="pwi" type="password" placeholder="كلمة السر" autocomplete="off">'+er+'<div class="two"><button class="btn" data-a="pwgo">دخول</button><button class="btn g" data-a="close">إلغاء</button></div></div></div>';
+ if(S.sh==="pw")return'<div class="sheet"><div><h3 style="margin-top:0">'+(S.ok?"تغيير كلمة السر":"اختر كلمة سر للإعدادات")+'</h3><input id="pw1" type="password" placeholder="كلمة السر (٤ حروف/أرقام على الأقل)" autocomplete="off"><input id="pw2" type="password" placeholder="أعد كتابتها" autocomplete="off">'+er+'<div class="two"><button class="btn" data-a="pwset">حفظ</button><button class="btn g" data-a="close">إلغاء</button></div></div></div>';
+ if(S.sh==="s")return'<div class="sheet"><div><h3 style="margin-top:0">⚙️ الإعدادات</h3><button class="btn g" style="width:100%;margin-bottom:8px" data-a="cfg">☁️ إعدادات Turso (السيرفر)</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="sync">🔄 مزامنة الآن</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="fl">💾 الملف المحلي والنسخ الاحتياطي</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="chpw">🔑 تغيير كلمة السر</button><button class="btn" style="width:100%" data-a="close">إغلاق</button></div></div>';
+ if(S.sh==="f"){var fs=!!window.showSaveFilePicker,b='<button class="btn g" style="width:100%;margin-bottom:8px" data-a="fdl">⬇️ تنزيل نسخة احتياطية</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="fimp">⬆️ استيراد نسخة من ملف</button><input id="fi" type="file" accept=".json,application/json" style="display:none">';
+  return'<div class="sheet"><div><h3 style="margin-top:0">الملف المحلي</h3>'+(FH?'<p style="color:var(--mut);margin:0 0 12px">مربوط بالملف: <b dir="ltr">'+esc(FH.name)+'</b><br>أي دفعة بتسجلها بتتحفظ فيه تلقائي.</p><button class="btn" style="width:100%;margin-bottom:8px" data-a="fsave">💾 حفظ الآن</button>':fs?'<p style="color:var(--mut);margin:0 0 12px">اربط البرنامج بملف على جهازك، وكل تسجيل بيتحفظ فيه تلقائي.</p><button class="btn" style="width:100%;margin-bottom:8px" data-a="fnew">📁 إنشاء ملف جديد وربطه</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="fopen">📂 فتح ملف موجود وربطه</button>':'<p style="color:var(--mut);margin:0 0 12px">الحفظ التلقائي في ملف مش متاح على الآيفون (قيد من Safari). بياناتك بتتحفظ على الجهاز نفسه، ودوس <b>تنزيل نسخة احتياطية</b> بانتظام واختار "حفظ في الملفات".</p>')+b+(FH?'<button class="btn d" style="width:100%;margin-bottom:8px" data-a="funlink">فصل الملف</button>':'')+'<button class="btn g" style="width:100%" data-a="close">إغلاق</button></div></div>'}
+ if(S.sh==="c")return'<div class="sheet"><div><h3 style="margin-top:0">الربط مع Turso</h3><span class="lbl">رابط القاعدة (libsql://...)</span><input id="cu" dir="ltr" placeholder="libsql://name-org.turso.io" value="'+esc(CFG.u)+'"><span class="lbl">مفتاح الوصول (Token)</span><input id="ct" dir="ltr" type="password" placeholder="Token" value="'+esc(CFG.t)+'"><div class="two"><button class="btn" data-a="dosc">حفظ واتصال</button><button class="btn g" data-a="close">إلغاء</button></div>'+(CFG.u?'<button class="btn d" style="width:100%;margin-top:8px" data-a="unlink">فصل الربط</button>':"")+'</div></div>';
+ if(S.sh==="cf")return'<div class="sheet"><div><h3 style="margin-top:0">فيه بيانات على الجهاز وعلى Turso</h3><p style="color:var(--mut);margin:0 0 12px">اختار اللي عايز تكمل بيه، والتاني هيتستبدل.</p><button class="btn" style="width:100%;margin-bottom:8px" data-a="usecloud">⬇️ استخدم بيانات Turso (تستبدل اللي على الجهاز)</button><button class="btn g" style="width:100%;margin-bottom:8px" data-a="uselocal">⬆️ استخدم بيانات الجهاز (تستبدل اللي على Turso)</button><button class="btn g" style="width:100%" data-a="close">لاحقًا</button></div></div>';
+ if(S.sh==="p"){var f=S.f||{};
+  return'<div class="sheet"><div><h3 style="margin-top:0">'+(f.id?"تعديل المورد":"مورد جديد")+'</h3><input id="pn" placeholder="اسم المورد" value="'+esc(f.name)+'"><input id="pp" type="tel" placeholder="رقم التليفون (اختياري)" value="'+esc(f.phone)+'"><div class="two"><button class="btn" data-a="savep">حفظ</button><button class="btn g" data-a="close">إلغاء</button></div>'+(f.id?'<button class="btn d" style="width:100%;margin-top:8px" data-a="delp">'+(S.del?"تأكيد حذف المورد بكل حركاته":"حذف المورد")+'</button>':"")+'</div></div>'}
+ var f=S.f||{};
+ return'<div class="sheet"><div><h3 style="margin-top:0">'+(f.id?"تعديل الدفعة":"دفعة جديدة")+'</h3><input id="fw" placeholder="دفعت إيه؟ (البيان)" value="'+esc(f.w)+'"><input id="fa" type="number" inputmode="decimal" placeholder="المبلغ" value="'+esc(f.a)+'"><textarea id="fn" placeholder="ملاحظة (اختياري) — اكتب أي حاجة تخص الدفعة">'+esc(f.n)+'</textarea><input id="fd" type="date" value="'+esc(f.d||today())+'"><div class="two"><button class="btn" data-a="savet">حفظ</button><button class="btn g" data-a="close">إلغاء</button></div>'+(f.id?'<button class="btn d" style="width:100%;margin-top:8px" data-a="delt">'+(S.del?"تأكيد الحذف":"حذف الدفعة")+'</button>':"")+'</div></div>'
+}
+function render(){
+ if(!S.sh){S.ok=false;S.pe=""}
+ var p=S.cur?P(S.cur):null,h='';
+ if(S.cur&&!p)S.cur=null;
+ if(p)h=suppH(p);
+ else{h='<div class="tabs noprint"><button data-a="tab" data-t="sup" class="'+(S.tab==="sup"?"on":"")+'">الموردين</button><button data-a="tab" data-t="rep" class="'+(S.tab==="rep"?"on":"")+'">التقرير</button></div>'+(S.tab==="sup"?homeH():repH())}
+ if(S.sh)h+=sheetH();
+ $("app").innerHTML=h;ob()
+}
+function csv(){
+ var r=["المورد,التاريخ,البيان,ملاحظة,المبلغ,المجموع التراكمي للمورد"];
+ S.ps.forEach(function(p){var c=0;asc(p.tx.filter(inr)).forEach(function(x){c+=x.a;r.push([p.name,x.d,x.w,x.n||"",x.a,c].map(function(v){return'"'+String(v).replace(/"/g,'""')+'"'}).join(","))})});
+ var b=new Blob(["\ufeff"+r.join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
+ a.href=URL.createObjectURL(b);a.download="payments.csv";document.body.appendChild(a);a.click();a.remove()
+}
+document.addEventListener("input",function(e){if(e.target.id==="q"){S.q=e.target.value;$("lst").innerHTML=listH()}});
+document.addEventListener("change",function(e){if(e.target.id==="fi"){var f=e.target.files[0];if(!f)return;f.text().then(function(t){if(!S.ps.length||confirm("هتستبدل البيانات الحالية بمحتوى الملف؟"))importData(t)}).catch(function(x){setFy("⚠️ "+x.message)});e.target.value="";return}
+ if(e.target.id==="rf"){S.from=e.target.value;render()}else if(e.target.id==="rt"){S.to=e.target.value;render()}});
+document.addEventListener("click",function(e){
+ var el=e.target.closest("[data-a]");if(!el)return;
+ var a=el.dataset.a,id=el.dataset.id,p=S.cur?P(S.cur):null;
+ if({addp:1,editp:1,newt:1,editt:1,savep:1,savet:1,delp:1,delt:1}[a]&&blocked())return;
+ if({cfg:1,dosc:1,unlink:1,fl:1,funlink:1,fnew:1,fopen:1,chpw:1,sync:1}[a]&&!S.ok)return;
+ if(a==="tab"){S.tab=el.dataset.t}
+ else if(a==="open"){S.cur=id}
+ else if(a==="back"){S.cur=null}
+ else if(a==="addp"){S.f=null;S.del=false;S.sh="p"}
+ else if(a==="editp"){S.f=p;S.del=false;S.sh="p"}
+ else if(a==="newt"){S.f=null;S.del=false;S.sh="t"}
+ else if(a==="editt"){S.f=p.tx.filter(function(x){return x.id===id})[0];S.del=false;S.sh="t"}
+ else if(a==="close"){S.sh=(S.ok&&(S.sh==="c"||S.sh==="f"||S.sh==="pw"))?"s":null}
+ else if(a==="gear"){S.pe="";S.sh=PW?"lk":"pw"}
+ else if(a==="chpw"){S.pe="";S.sh="pw"}
+ else if(a==="pwgo"){hp($("pwi").value).then(function(h){if(h===PW){S.ok=true;S.sh="s";S.pe=""}else S.pe="كلمة السر غلط";render()});return}
+ else if(a==="pwset"){var p1=$("pw1").value,p2=$("pw2").value;
+  if(p1.length<4){S.pe="كلمة السر لازم ٤ حروف/أرقام على الأقل";render();return}
+  if(p1!==p2){S.pe="الكلمتين مش متطابقتين";render();return}
+  hp(p1).then(function(h){PW=h;try{localStorage.setItem("pay_pw",h)}catch(x){}S.ok=true;S.sh="s";S.pe="";render()});return}
+ else if(a==="savep"){var n=$("pn").value.trim();if(!n){$("pn").focus();return}
+  if(S.f&&S.f.id){S.f.name=n;S.f.phone=$("pp").value.trim()}else S.ps.push({id:"p"+Date.now(),name:n,phone:$("pp").value.trim(),tx:[]});
+  S.sh=null;save()}
+ else if(a==="delp"){if(S.del){S.ps=S.ps.filter(function(x){return x.id!==S.f.id});S.cur=null;S.sh=null;S.del=false;save()}else S.del=true}
+ else if(a==="savet"){var amt=parseFloat($("fa").value);if(!(amt>0)){$("fa").focus();return}
+  var o={w:$("fw").value.trim()||"دفعة",n:$("fn").value.trim(),a:amt,d:$("fd").value||today()};
+  if(S.f&&S.f.id)Object.assign(S.f,o);else{o.id="t"+Date.now();p.tx.push(o)}
+  S.sh=null;save()}
+ else if(a==="delt"){if(S.del){p.tx=p.tx.filter(function(x){return x.id!==S.f.id});S.sh=null;S.del=false;save()}else S.del=true}
+ else if(a==="cfg"){S.sh="c"}
+ else if(a==="dosc"){var u=$("cu").value.trim(),tk=$("ct").value.trim();if(!u||!tk)return;CFG={u:u,t:tk};try{localStorage.setItem("pay_cfg",JSON.stringify(CFG))}catch(x){}S.sh=null;render();pull();return}
+ else if(a==="unlink"){CFG={};try{localStorage.removeItem("pay_cfg")}catch(x){}S.sh=null;S.sy="☁️ غير متصل بـ Turso"}
+ else if(a==="sync"){S.sh=null;render();pull();return}
+ else if(a==="usecloud"){apply(S.rv,S.rts);return}
+ else if(a==="uselocal"){LU=Date.now();store();S.sh=null;render();push();return}
+ else if(a==="hidehint"){try{localStorage.setItem("pay_hint","1")}catch(x){}}
+ else if(a==="fl"){S.sh="f"}
+ else if(a==="fdl"){dl();return}
+ else if(a==="fimp"){var fi=$("fi");if(!fi){S.sh=null;render();return}fi.click();return}
+ else if(a==="fsave"){fwrite(true);return}
+ else if(a==="funlink"){FH=null;idb("readwrite",function(st){return st.delete("f")}).catch(function(){});setFy(bk());S.sh=null}
+ else if(a==="fnew"){window.showSaveFilePicker({suggestedName:"payments.json",types:[{description:"JSON",accept:{"application/json":[".json"]}}]}).then(function(h){return fpick(h).then(function(){S.sh=null;render();return fwrite(true)})}).catch(function(){});return}
+ else if(a==="fopen"){window.showOpenFilePicker({types:[{description:"JSON",accept:{"application/json":[".json"]}}]}).then(function(hs){var h=hs[0];return h.getFile().then(function(f){return f.text()}).then(function(t){return fpick(h).then(function(){if(t.trim()){if(!S.ps.length||confirm("هتستخدم بيانات الملف وتستبدل اللي على الجهاز؟")){importData(t)}}else return fwrite(true);S.sh=null;render();setFy("💾 مربوط بملف: "+h.name)})})}).catch(function(e){if(e&&e.name!=="AbortError")setFy("⚠️ "+e.message)});return}
+ else if(a==="all"){S.from="";S.to=""}
+ else if(a==="month"){var t=today();S.from=t.slice(0,8)+"01";S.to=t}
+ else if(a==="printp"){pOne(id);return}
+ else if(a==="shp"){var q=P(id),l=asc(S.cur?q.tx:q.tx.filter(inr));if(l.length)shareT(stmtText(q,l,S.cur?"":S.from,S.cur?"":S.to),el);return}
+ else if(a==="print"){try{window.print()}catch(x){}return}
+ else if(a==="csv"){csv();return}
+ render()
+});
+try{var cv=document.createElement("canvas");cv.width=cv.height=180;var cx=cv.getContext("2d");cx.fillStyle="#0f766e";cx.fillRect(0,0,180,180);cx.font="100px serif";cx.textAlign="center";cx.textBaseline="middle";cx.fillText("💰",90,98);document.getElementById("ati").href=cv.toDataURL("image/png")}catch(e){}
+window.addEventListener("offline",ob);window.addEventListener("online",function(){ob();if(CFG.u&&!S.sh)pull()});
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+render();
+if(CFG.u)pull();
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&CFG.u&&!S.sh)pull()});
+</script>
+</body>
+</html>
